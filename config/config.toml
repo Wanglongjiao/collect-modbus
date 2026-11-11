@@ -1,0 +1,69 @@
+version = 1
+
+[defaults]
+poll_interval = 10000
+offline_after_failures = 3   # 失败次数超过阈值后标记离线
+max_gap = 8                  # 连续寄存器合并读的最大空洞，超过则拆请求
+
+[log]
+level = "info"            # debug|info|warn|error
+console = true
+path = "./log/modbus.log" # 建议绝对路径
+max_size = 50             # MB
+max_backups = 10
+max_age = 30              # day
+
+[[connections]]
+id = "plc_main"              # 不含传输方式
+transport = "tcp"            # tcp|rtu|rtu_over_tcp
+host = "192.168.1.10"
+port = 502
+timeout = 3000               # 仅慢设备需调整；建连/重试/退避/请求间隔均有内置默认值
+
+# [[connections]]              # RTU 示例
+# id = "meter_485"
+# transport = "rtu"
+# serial_port = "COM3"        # Linux: /dev/ttyUSB0
+# serial = "9600|8N1"         # 波特率|数据位+校验位+停止位，N=无校验 E=偶 O=奇
+# timeout = 3000              # 帧间隔由波特率自动推导，无需配置
+
+[[devices]]
+id = "plc_01"
+name = "主控 PLC"
+connection = "plc_main"
+device_address = 1
+endian = "ABCD"              # 32/64 位字节+字序，可选 ABCD|CDAB|BADC|DCBA，tag 可覆盖
+
+
+[[devices.tags]]
+id = "run"
+name = "运行状态"
+area = "coil"      # coil 线圈|discrete_input 离散输入|holding_register 持有寄存器|input_register 输入寄存器
+address = 0
+data_type = "bool"
+permission = "r"
+
+[[devices.tags]]
+id = "temperature"
+name = "温度"
+area = "holding_register"
+address = 100
+data_type = "float32"
+# endian = "CDAB"         # 仅个别点位与设备默认不同时才配，否则继承 devices.endian
+scale = 1.0
+offset = 0.0              # 最终值 = raw * scale + offset
+precision = 2
+deadband = 0.1            # 变化超过阈值才上报
+unit = "C"
+
+[[devices.tags]]
+id = "status"
+name = "状态字"
+area = "holding_register"
+address = 300
+data_type = "uint16"
+
+  [[devices.tags.bits]]
+  id = "alarm"
+  name = "报警位"
+  index = 3               # 0~15

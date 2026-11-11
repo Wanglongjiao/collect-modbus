@@ -1,0 +1,55 @@
+# 二进制可执行文件
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go 编译产物
+go-build/
+*.a
+/[!vendor]*/[a-zA-Z0-9]*  # 根目录编译出来的二进制，按需取舍
+!go.mod
+!go.sum
+
+# 测试、覆盖率文件
+*.coverprofile
+*.pprof
+coverage.html
+
+# 依赖缓存、工具
+/vendor/
+# 如果你手动维护 vendor 目录，注释上面这一行
+
+# IDE 编辑器
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# 日志、临时文件
+*.log
+tmp/
+temp/
+*.tmp
+*.bak
+
+# 配置密钥、本地环境
+.env
+.env.local
+.env.*.local
+config.local.toml
+config.local.yaml
+
+# golangci-lint
+.golangci.yml.bak
+
+# 跨平台编译输出目录（常用）
+bin/
+dist/
+build/
