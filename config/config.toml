@@ -2,7 +2,7 @@ version = 1
 
 [defaults]
 poll_interval = 10000
-offline_after_failures = 3   # 失败次数超过阈值后标记离线
+offline_after_failures = 3   # 设备连续采集失败达到该次数则离线；连接断开时同连接下设备立即离线
 max_gap = 8                  # 连续寄存器合并读的最大空洞，超过则拆请求
 
 [log]
