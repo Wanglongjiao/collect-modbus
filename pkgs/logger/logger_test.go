@@ -3,6 +3,8 @@ package logger
 import (
 	"errors"
 	"testing"
+
+	"go.uber.org/zap"
 )
 
 func TestJSONLogger(t *testing.T) {
@@ -19,8 +21,8 @@ func TestJSONLogger(t *testing.T) {
 	defer logger.Sync()
 
 	err = errors.New("pkg error")
-	logger.Error("err occurs", WrapMeta(nil, NewMeta("para1", "value1"), NewMeta("para2", "value2"))...)
-	logger.Error("err occurs", WrapMeta(err, NewMeta("para1", "value1"), NewMeta("para2", "value2"))...)
+	logger.Error("err occurs", zap.String("para1", "value1"), zap.String("para2", "value2"))
+	logger.Error("err occurs", zap.Error(err), zap.String("para1", "value1"), zap.String("para2", "value2"))
 	logger.Info("info msg")
 	logger.Debug("debug msg")
 	Get("test").Info("dddddddddddddd")

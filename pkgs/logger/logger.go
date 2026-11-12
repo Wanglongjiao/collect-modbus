@@ -269,3 +269,4 @@ func CloseAll() {
 		return true
 	})
 }
+
